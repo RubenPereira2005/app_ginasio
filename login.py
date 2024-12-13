@@ -51,14 +51,12 @@ class Login:
         for widget in self.frame_principal.winfo_children():
             widget.destroy()
 
-        self.frame_principal.configure(bg="#f0f8ff")  # Fundo azul claro
-        
-        tk.Label(self.frame_principal, text="Login", font=("Arial", 20), bg="#f0f8ff", fg="#00008b").pack(pady=10)
-        tk.Label(self.frame_principal, text="Utilizador ou E-mail:", bg="#f0f8ff", fg="#00008b").pack()
+        tk.Label(self.frame_principal, text="Login", font=("Arial", 20)).pack(pady=10)
+        tk.Label(self.frame_principal, text="Utilizador ou E-mail:").pack()
         entrada_identificador = tk.Entry(self.frame_principal)
         entrada_identificador.pack()
 
-        tk.Label(self.frame_principal, text="Senha:", bg="#f0f8ff", fg="#00008b").pack()
+        tk.Label(self.frame_principal, text="Senha:").pack()
         entrada_senha = tk.Entry(self.frame_principal, show="*")
         entrada_senha.pack()
 
@@ -77,26 +75,24 @@ class Login:
         for widget in self.frame_principal.winfo_children():
             widget.destroy()
 
-        self.frame_principal.configure(bg="#f0f8ff")  # Fundo azul claro
-
-        tk.Label(self.frame_principal, text="Registo", font=("Arial", 20), bg="#f0f8ff", fg="#00008b").pack(pady=10)
-        tk.Label(self.frame_principal, text="Utilizador:", bg="#f0f8ff", fg="#00008b").pack()
+        tk.Label(self.frame_principal, text="Registo", font=("Arial", 20)).pack(pady=10)
+        tk.Label(self.frame_principal, text="Utilizador:").pack()
         entrada_utilizador = tk.Entry(self.frame_principal)
         entrada_utilizador.pack()
 
-        tk.Label(self.frame_principal, text="Senha:", bg="#f0f8ff", fg="#00008b").pack()
+        tk.Label(self.frame_principal, text="Senha:").pack()
         entrada_senha = tk.Entry(self.frame_principal, show="*")
         entrada_senha.pack()
 
-        tk.Label(self.frame_principal, text="E-mail:", bg="#f0f8ff", fg="#00008b").pack()
+        tk.Label(self.frame_principal, text="E-mail:").pack()
         entrada_email = tk.Entry(self.frame_principal)
         entrada_email.pack()
 
-        tk.Label(self.frame_principal, text="Número de Telefone:", bg="#f0f8ff", fg="#00008b").pack()
+        tk.Label(self.frame_principal, text="Número de Telefone:").pack()
         entrada_telefone = tk.Entry(self.frame_principal)
         entrada_telefone.pack()
 
-        tk.Label(self.frame_principal, text="Morada:", bg="#f0f8ff", fg="#00008b").pack()
+        tk.Label(self.frame_principal, text="Morada:").pack()
         entrada_morada = tk.Entry(self.frame_principal)
         entrada_morada.pack()
 
