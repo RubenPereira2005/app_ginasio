@@ -3,7 +3,7 @@ import json
 import os
 
 class Login:
-    ARQUIVO_utilizadores = "utilizadores.json"
+    ARQUIVO_utilizadores = os.path.join(os.path.dirname(__file__), "utilizadores.json")
 
     def __init__(self, frame_principal, pagina_aulas_callback):
         self.frame_principal = frame_principal
@@ -51,12 +51,14 @@ class Login:
         for widget in self.frame_principal.winfo_children():
             widget.destroy()
 
-        tk.Label(self.frame_principal, text="Login", font=("Arial", 20)).pack(pady=10)
-        tk.Label(self.frame_principal, text="Utilizador ou E-mail:").pack()
+        self.frame_principal.configure(bg="#f0f8ff")  # Fundo azul claro
+        
+        tk.Label(self.frame_principal, text="Login", font=("Arial", 20), bg="#f0f8ff", fg="#00008b").pack(pady=10)
+        tk.Label(self.frame_principal, text="Utilizador ou E-mail:", bg="#f0f8ff", fg="#00008b").pack()
         entrada_identificador = tk.Entry(self.frame_principal)
         entrada_identificador.pack()
 
-        tk.Label(self.frame_principal, text="Senha:").pack()
+        tk.Label(self.frame_principal, text="Senha:", bg="#f0f8ff", fg="#00008b").pack()
         entrada_senha = tk.Entry(self.frame_principal, show="*")
         entrada_senha.pack()
 
@@ -66,33 +68,35 @@ class Login:
             if self.validar_login(identificador, senha):
                 self.pagina_aulas_callback()
             else:
-                print("Erro: Utilizador ou senha inválidos.")
+                tk.Label(self.frame_principal, text="Erro: Utilizador ou senha inválidos.", bg="#f0f8ff", fg="red").pack()
 
-        tk.Button(self.frame_principal, text="Entrar", command=fazer_login).pack(pady=10)
-        tk.Button(self.frame_principal, text="Registe-se", command=self.pagina_registo).pack()
+        tk.Button(self.frame_principal, text="Entrar", command=fazer_login, bg="#4682b4", fg="white").pack(pady=10)
+        tk.Button(self.frame_principal, text="Registe-se", command=self.pagina_registo, bg="#4682b4", fg="white").pack()
 
     def pagina_registo(self):
         for widget in self.frame_principal.winfo_children():
             widget.destroy()
 
-        tk.Label(self.frame_principal, text="Registo", font=("Arial", 20)).pack(pady=10)
-        tk.Label(self.frame_principal, text="Utilizador:").pack()
+        self.frame_principal.configure(bg="#f0f8ff")  # Fundo azul claro
+
+        tk.Label(self.frame_principal, text="Registo", font=("Arial", 20), bg="#f0f8ff", fg="#00008b").pack(pady=10)
+        tk.Label(self.frame_principal, text="Utilizador:", bg="#f0f8ff", fg="#00008b").pack()
         entrada_utilizador = tk.Entry(self.frame_principal)
         entrada_utilizador.pack()
 
-        tk.Label(self.frame_principal, text="Senha:").pack()
+        tk.Label(self.frame_principal, text="Senha:", bg="#f0f8ff", fg="#00008b").pack()
         entrada_senha = tk.Entry(self.frame_principal, show="*")
         entrada_senha.pack()
 
-        tk.Label(self.frame_principal, text="E-mail:").pack()
+        tk.Label(self.frame_principal, text="E-mail:", bg="#f0f8ff", fg="#00008b").pack()
         entrada_email = tk.Entry(self.frame_principal)
         entrada_email.pack()
 
-        tk.Label(self.frame_principal, text="Número de Telefone:").pack()
+        tk.Label(self.frame_principal, text="Número de Telefone:", bg="#f0f8ff", fg="#00008b").pack()
         entrada_telefone = tk.Entry(self.frame_principal)
         entrada_telefone.pack()
 
-        tk.Label(self.frame_principal, text="Morada:").pack()
+        tk.Label(self.frame_principal, text="Morada:", bg="#f0f8ff", fg="#00008b").pack()
         entrada_morada = tk.Entry(self.frame_principal)
         entrada_morada.pack()
 
@@ -105,14 +109,14 @@ class Login:
 
             # Verificação simples dos campos
             if not (utilizador and senha and email and telefone and morada):
-                print("Todos os campos são obrigatórios!")
+                tk.Label(self.frame_principal, text="Todos os campos são obrigatórios!", bg="#f0f8ff", fg="red").pack()
                 return
 
             if self.guardar_utilizador(utilizador, senha, email, telefone, morada):
-                print("Registro realizado com sucesso!")
+                tk.Label(self.frame_principal, text="Registro realizado com sucesso!", bg="#f0f8ff", fg="green").pack()
                 self.pagina_login()
             else:
-                print("Erro: Nome de utilizador já existe ou falha ao salvar os dados.")
+                tk.Label(self.frame_principal, text="Erro: Nome de utilizador já existe ou falha ao salvar os dados.", bg="#f0f8ff", fg="red").pack()
 
-        tk.Button(self.frame_principal, text="Registar", command=fazer_registo).pack(pady=10)
-        tk.Button(self.frame_principal, text="Voltar", command=self.pagina_login).pack()
+        tk.Button(self.frame_principal, text="Registar", command=fazer_registo, bg="#4682b4", fg="white").pack(pady=10)
+        tk.Button(self.frame_principal, text="Voltar", command=self.pagina_login, bg="#4682b4", fg="white").pack()
