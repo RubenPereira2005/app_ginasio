@@ -1,1 +1,8 @@
-{".": "."}
+{
+    ".": {
+        "senha": ".",
+        "email": ".@gmail.com",
+        "telefone": ".",
+        "morada": "."
+    }
+}
