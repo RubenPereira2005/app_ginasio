@@ -13,12 +13,44 @@ class PaginaAulas:
         tipos_imagem = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp')
         imagens_encontradas = []
 
+        horarios_por_aula = {
+            "Pilates": {
+                "dias": ["Segunda-feira", "Terça-feira", "Quarta-feira"],
+                "horarios": ["08:00", "16:00"],
+                "professor": "Prof. Ana"
+            },
+            "Zumba": {
+                "dias": ["Terça-feira", "Quarta-feira", "Quinta-feira"],
+                "horarios": ["10:00", "18:00"],
+                "professor": "Prof. João"
+            },
+            "Yoga": {
+                "dias": ["Sexta-feira", "Sábado", "Domingo"],
+                "horarios": ["09:00", "15:00"],
+                "professor": "Prof. Carla"
+            },
+        }
+
         for root, dirs, files in os.walk(diretorio):
             for file in files:
                 if file.lower().endswith(tipos_imagem):
                     caminho_imagem = os.path.join(root, file)
-                    nome_aula = os.path.splitext(file)[0]
-                    imagens_encontradas.append({"nome": nome_aula, "imagem": caminho_imagem, "professor": "Prof. Silva", "participantes": 10})
+                    nome_aula = os.path.splitext(file)[0].capitalize()
+                    
+                    horarios = horarios_por_aula.get(nome_aula, {
+                        "dias": ["Segunda-feira"],
+                        "horarios": ["08:00"],
+                        "professor": "Prof. Silva"
+                    })
+
+                    imagens_encontradas.append({
+                        "nome": nome_aula,
+                        "imagem": caminho_imagem,
+                        "professor": horarios["professor"],
+                        "participantes": 0,
+                        "dias": horarios["dias"],
+                        "horarios": horarios["horarios"]
+                    })
 
         return imagens_encontradas
 
@@ -58,18 +90,52 @@ class PaginaAulas:
         return borda
 
     def mostrar_detalhes(self, aula):
-        detalhes_janela = tk.Toplevel(self.frame_principal)
-        detalhes_janela.title("Detalhes da Aula")
+        for widget in self.frame_principal.winfo_children():
+            widget.destroy()
 
-        tk.Label(detalhes_janela, text=f"Aula: {aula['nome']}", font=("Arial", 18)).pack(pady=10)
-        tk.Label(detalhes_janela, text=f"Professor: {aula['professor']}", font=("Arial", 14)).pack(pady=5)
-        tk.Label(detalhes_janela, text=f"Número de Participantes: {aula['participantes']}", font=("Arial", 14)).pack(pady=5)
+        tk.Label(self.frame_principal, text=f"Aula: {aula['nome']}", font=("Arial", 18)).pack(pady=10)
+        tk.Label(self.frame_principal, text=f"Professor: {aula['professor']}", font=("Arial", 14)).pack(pady=5)
+        tk.Label(self.frame_principal, text=f"Número de Participantes: {aula['participantes']}", font=("Arial", 14)).pack(pady=5)
 
-        reservar_btn = tk.Button(detalhes_janela, text="Reservar Aula", command=lambda: self.reservar_aula(aula))
+        reservar_btn = tk.Button(self.frame_principal, text="Reservar Aula", command=lambda: self.abrir_menu_reserva(aula))
         reservar_btn.pack(pady=20)
 
-    def reservar_aula(self, aula):
-        messagebox.showinfo("Reservar Aula", f"Você reservou a aula '{aula['nome']}' com sucesso!")
+        voltar_btn = tk.Button(self.frame_principal, text="Voltar", command=self.pagina_aulas)
+        voltar_btn.pack(pady=20)
+
+    def abrir_menu_reserva(self, aula):
+        for widget in self.frame_principal.winfo_children():
+            widget.destroy()
+
+        tk.Label(self.frame_principal, text=f"Reservar: {aula['nome']}", font=("Arial", 18)).pack(pady=10)
+
+        tk.Label(self.frame_principal, text="Escolha o dia:", font=("Arial", 14)).pack(pady=5)
+        dia_var = tk.StringVar(value=aula['dias'][0])
+        dia_menu = tk.OptionMenu(self.frame_principal, dia_var, *aula['dias'])
+        dia_menu.pack(pady=5)
+
+        tk.Label(self.frame_principal, text="Escolha o horário:", font=("Arial", 14)).pack(pady=5)
+        horario_var = tk.StringVar(value=aula['horarios'][0])
+        horario_menu = tk.OptionMenu(self.frame_principal, horario_var, *aula['horarios'])
+        horario_menu.pack(pady=5)
+
+        confirmar_btn = tk.Button(
+            self.frame_principal,
+            text="Confirmar Reserva",
+            command=lambda: self.confirmar_reserva(aula, dia_var.get(), horario_var.get())
+        )
+        confirmar_btn.pack(pady=20)
+
+        voltar_btn = tk.Button(self.frame_principal, text="Voltar", command=lambda: self.mostrar_detalhes(aula))
+        voltar_btn.pack(pady=10)
+
+    def confirmar_reserva(self, aula, dia, horario):
+        aula['participantes'] += 1
+        messagebox.showinfo(
+            "Reserva Confirmada",
+            f"Aula '{aula['nome']}' reservada para {dia} às {horario}. Participantes atualizados!"
+        )
+        self.mostrar_detalhes(aula)
 
     def pagina_aulas(self):
         for widget in self.frame_principal.winfo_children():
@@ -99,12 +165,8 @@ class PaginaAulas:
                 print(f"Erro ao carregar a imagem: {e}")
                 continue
 
-            label_aula = tk.Label(frame_aula, image=img_tk)
+            label_aula = tk.Label(frame_aula, image=img_tk, cursor="hand2")
             label_aula.image = img_tk
             label_aula.pack()
 
-            detalhes_btn = tk.Button(frame_aula, text="Detalhes", command=lambda aula=aula: self.mostrar_detalhes(aula))
-            detalhes_btn.pack(pady=5)
-
-        frame_aulas.update_idletasks()
-        canvas.config(scrollregion=canvas.bbox("all"))
+            label_aula.bind("<Button-1>", lambda event, aula=aula: self.mostrar_detalhes(aula))
