@@ -1,105 +1,112 @@
 import tkinter as tk
-from tkinter import Toplevel, messagebox
-import calendar
-from datetime import datetime
+from datetime import datetime, timedelta
 
-class Calendario:
-    def __init__(self, frame_principal, aulas_por_dia):
-        """
-        Inicializa o calendário.
-        :param frame_principal: Frame onde o calendário será exibido.
-        :param aulas_por_dia: Dicionário com (ano, mes, dia) como chaves e lista de aulas como valores.
-        """
+class ListaAulas:
+    def __init__(self, frame_principal, aulas_semanais):
         self.frame_principal = frame_principal
-        self.aulas_por_dia = aulas_por_dia  # Exemplo: {(2024, 1, 1): ["Aula 1 - 10:00", "Aula 2 - 14:00"]}
-        self.ano_atual = datetime.now().year
-        self.mes_atual = datetime.now().month
+        self.aulas_semanais = aulas_semanais
+        self.dia_atual = datetime.now()  # Dia inicial para exibição
+        self.dia_limite = timedelta(days=6)  # Limite de 6 dias
 
-    def mostrar_calendario(self):
-        """Exibe o calendário do mês atual."""
+        # Dicionário para traduzir os dias da semana para português de Portugal
+        self.dias_da_semana_pt = {
+            "Monday": "Segunda-feira",
+            "Tuesday": "Terça-feira",
+            "Wednesday": "Quarta-feira",
+            "Thursday": "Quinta-feira",
+            "Friday": "Sexta-feira",
+            "Saturday": "Sábado",
+            "Sunday": "Domingo"
+        }
+
+    def mostrar_lista(self):
+        """Exibe a lista de aulas para o dia atual."""
         for widget in self.frame_principal.winfo_children():
             widget.destroy()
 
-        # Cabeçalho com botões de navegação do mês
+        # Cabeçalho com botões de navegação
         frame_cabecalho = tk.Frame(self.frame_principal)
-        frame_cabecalho.pack(pady=10)
+        frame_cabecalho.pack(pady=10, fill="x")
 
-        btn_mes_anterior = tk.Button(
-            frame_cabecalho, text="◀", command=self.mes_anterior, font=("Arial", 14)
+        # Frame para os botões de navegação e texto centralizado com largura fixa
+        frame_navegacao = tk.Frame(frame_cabecalho)
+        frame_navegacao.pack(side="top", pady=5)
+
+        # Largura fixa baseada no maior texto ("Segunda-feira")
+        largura_fixa = 20
+
+        # Botão anterior sem borda e com maior seta
+        self.btn_anterior = tk.Button(
+            frame_navegacao, text="◀", command=self.dia_anterior, font=("Arial", 18), width=3, bd=0
         )
-        btn_mes_anterior.pack(side="left", padx=10)
+        self.btn_anterior.grid(row=0, column=0, padx=1)
 
-        lbl_mes = tk.Label(
-            frame_cabecalho,
-            text=f"{calendar.month_name[self.mes_atual]} {self.ano_atual}",
-            font=("Arial", 16, "bold"),
+        # Usar o dicionário para traduzir o nome do dia
+        nome_dia = self.dias_da_semana_pt[self.dia_atual.strftime("%A")]
+
+        lbl_dia = tk.Label(
+            frame_navegacao,
+            text=f"{nome_dia}, {self.dia_atual.strftime('%d/%m/%Y')}",
+            font=("Arial", 14, "bold"),
+            width=largura_fixa,
+            anchor="center"
         )
-        lbl_mes.pack(side="left")
+        lbl_dia.grid(row=0, column=1, padx=10)
 
-        btn_mes_posterior = tk.Button(
-            frame_cabecalho, text="▶", command=self.mes_posterior, font=("Arial", 14)
+        # Botão próximo sem borda e com maior seta
+        self.btn_proximo = tk.Button(
+            frame_navegacao, text="▶", command=self.dia_proximo, font=("Arial", 18), width=3, bd=0
         )
-        btn_mes_posterior.pack(side="left", padx=10)
+        self.btn_proximo.grid(row=0, column=2, padx=1)
 
-        # Criar o calendário do mês
-        frame_calendario = tk.Frame(self.frame_principal)
-        frame_calendario.pack(pady=10)
+        # Título centralizado
+        tk.Label(self.frame_principal, text="Aulas do Dia", font=("Arial", 16, "bold")).pack(pady=20, anchor="center")
 
-        # Dias da semana
-        dias_semana = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"]
-        for dia in dias_semana:
-            tk.Label(frame_calendario, text=dia, font=("Arial", 12, "bold"), width=5).grid(row=0, column=dias_semana.index(dia))
+        # Exibir aulas para o dia atual
+        nome_dia = self.dias_da_semana_pt[self.dia_atual.strftime("%A")]
 
-        # Dias do mês
-        cal = calendar.Calendar(firstweekday=0)  # Começa na segunda-feira
-        dias_mes = cal.itermonthdays2(self.ano_atual, self.mes_atual)  # Retorna (dia, dia_da_semana)
+        # Frame para o dia
+        frame_dia = tk.Frame(self.frame_principal)
+        frame_dia.pack(fill="both", pady=10)
 
-        linha = 1
-        for dia, dia_semana in dias_mes:
-            if dia == 0:  # Dias fora do mês
-                tk.Label(frame_calendario, text="", width=5).grid(row=linha, column=dia_semana)
-            else:
-                btn_dia = tk.Button(
-                    frame_calendario,
-                    text=str(dia),
-                    width=5,
-                    command=lambda d=dia: self.mostrar_aulas(d)
-                )
-                btn_dia.grid(row=linha, column=dia_semana)
-            if dia_semana == 6:  # Domingo, nova linha
-                linha += 1
+        # Listar aulas do dia
+        aulas_do_dia = []
+        for aula, detalhes in self.aulas_semanais.items():
+            if nome_dia in detalhes["dias"]:
+                for horario in detalhes["horarios"]:
+                    aulas_do_dia.append(f"{aula} - {horario} - {detalhes['professor']}")
 
-    def mes_anterior(self):
-        """Navega para o mês anterior."""
-        if self.mes_atual == 1:
-            self.mes_atual = 12
-            self.ano_atual -= 1
+        if aulas_do_dia:
+            for aula in aulas_do_dia:
+                tk.Label(frame_dia, text=aula, font=("Arial", 12)).pack(anchor="center", pady=5)
         else:
-            self.mes_atual -= 1
-        self.mostrar_calendario()
+            tk.Label(frame_dia, text="Sem aulas", font=("Arial", 12, "italic")).pack(anchor="center", pady=5)
 
-    def mes_posterior(self):
-        """Navega para o mês seguinte."""
-        if self.mes_atual == 12:
-            self.mes_atual = 1
-            self.ano_atual += 1
+        # Verificar e ocultar botões se atingirem o limite
+        self.atualizar_botoes()
+
+    def dia_anterior(self):
+        """Retrocede um dia no período exibido."""
+        if self.dia_atual - datetime.now() > -self.dia_limite:
+            self.dia_atual -= timedelta(days=1)
+            self.mostrar_lista()
+
+    def dia_proximo(self):
+        """Avança um dia no período exibido (máximo de 7 dias a partir de hoje)."""
+        if self.dia_atual - datetime.now() < self.dia_limite:
+            self.dia_atual += timedelta(days=1)
+            self.mostrar_lista()
+
+    def atualizar_botoes(self):
+        """Atualiza a visibilidade dos botões de navegação dependendo dos limites."""
+        # Verificar se atingiu o limite para o botão anterior
+        if self.dia_atual <= datetime.now() - self.dia_limite:
+            self.btn_anterior.grid_forget()
         else:
-            self.mes_atual += 1
-        self.mostrar_calendario()
+            self.btn_anterior.grid(row=0, column=0, padx=1)
 
-    def mostrar_aulas(self, dia):
-        """Exibe as aulas disponíveis para o dia selecionado."""
-        aulas = self.aulas_por_dia.get((self.ano_atual, self.mes_atual, dia), [])
-
-        if not aulas:
-            messagebox.showinfo("Sem Aulas", f"Não há aulas disponíveis para o dia {dia}.")
-            return
-
-        # Janela popup para mostrar as aulas
-        janela_aulas = Toplevel(self.frame_principal)
-        janela_aulas.title(f"Aulas do Dia {dia} - {calendar.month_name[self.mes_atual]} {self.ano_atual}")
-
-        tk.Label(janela_aulas, text=f"Aulas do Dia {dia}", font=("Arial", 16)).pack(pady=10)
-
-        for aula in aulas:
-            tk.Label(janela_aulas, text=aula, font=("Arial", 12)).pack(pady=5)
+        # Verificar se atingiu o limite para o botão próximo
+        if self.dia_atual >= datetime.now() + self.dia_limite:
+            self.btn_proximo.grid_forget()
+        else:
+            self.btn_proximo.grid(row=0, column=2, padx=1)
