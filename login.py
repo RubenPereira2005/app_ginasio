@@ -66,7 +66,7 @@ class Login:
             if self.validar_login(identificador, senha):
                 self.pagina_aulas_callback()
             else:
-                tk.Label(self.frame_principal, text="Erro: Utilizador ou senha inválidos.", bg="#f0f8ff", fg="red").pack()
+                tk.Label(self.frame_principal, text="Erro: Utilizador ou senha inválidos.", fg="red").pack()
 
         tk.Button(self.frame_principal, text="Entrar", command=fazer_login, bg="#4682b4", fg="white").pack(pady=10)
         tk.Button(self.frame_principal, text="Registe-se", command=self.pagina_registo, bg="#4682b4", fg="white").pack()
@@ -97,6 +97,11 @@ class Login:
         entrada_morada.pack()
 
         def fazer_registo():
+            # Criação de um rótulo de mensagem para exibir erros ou sucessos
+            if not hasattr(self, 'mensagem_registo'):
+                self.mensagem_registo = tk.Label(self.frame_principal, fg="red")
+                self.mensagem_registo.pack()
+
             utilizador = entrada_utilizador.get().strip()
             senha = entrada_senha.get().strip()
             email = entrada_email.get().strip()
@@ -105,14 +110,19 @@ class Login:
 
             # Verificação simples dos campos
             if not (utilizador and senha and email and telefone and morada):
-                tk.Label(self.frame_principal, text="Todos os campos são obrigatórios!", bg="#f0f8ff", fg="red").pack()
+                self.mensagem_registo.config(text="Todos os campos são obrigatórios!", fg="red")
+                return
+
+            # Validação do e-mail
+            if "@" not in email:
+                self.mensagem_registo.config(text="E-mail inválido! Certifique-se de incluir '@'.", fg="red")
                 return
 
             if self.guardar_utilizador(utilizador, senha, email, telefone, morada):
-                tk.Label(self.frame_principal, text="Registro realizado com sucesso!", bg="#f0f8ff", fg="green").pack()
+                self.mensagem_registo.config(text="Registro realizado com sucesso!", fg="green")
                 self.pagina_login()
             else:
-                tk.Label(self.frame_principal, text="Erro: Nome de utilizador já existe ou falha ao salvar os dados.", bg="#f0f8ff", fg="red").pack()
+                self.mensagem_registo.config(text="Erro: Nome de utilizador já existe ou falha ao salvar os dados.", fg="red")
 
         tk.Button(self.frame_principal, text="Registar", command=fazer_registo, bg="#4682b4", fg="white").pack(pady=10)
         tk.Button(self.frame_principal, text="Voltar", command=self.pagina_login, bg="#4682b4", fg="white").pack()

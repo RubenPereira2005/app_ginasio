@@ -134,8 +134,3 @@ class MenuHamburguer:
         """Callback para logout que também fecha o menu."""
         self.fechar_menu()
         self.logout_callback()
-
-    def sair(self):
-        """Fecha o aplicativo."""
-        if messagebox.askyesno("Sair", "Deseja realmente sair?"):
-            self.root.destroy()
