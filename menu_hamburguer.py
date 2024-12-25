@@ -2,12 +2,13 @@ import tkinter as tk
 from tkinter import messagebox
 
 class MenuHamburguer:
-    def __init__(self, root, frame_principal, mostrar_aulas_callback, voltar_pagina_inicial_callback, mostrar_calendario_callback, logout_callback):
+    def __init__(self, root, frame_principal, mostrar_aulas_callback, voltar_pagina_inicial_callback, mostrar_calendario_callback, mostrar_notificacoes_callback, logout_callback):
         self.root = root
         self.frame_principal = frame_principal
         self.mostrar_aulas_callback = mostrar_aulas_callback
         self.voltar_pagina_inicial_callback = voltar_pagina_inicial_callback
         self.mostrar_calendario_callback = mostrar_calendario_callback
+        self.mostrar_notificacoes_callback = mostrar_notificacoes_callback
         self.logout_callback = logout_callback
 
         self.menu_aberto = False
@@ -95,6 +96,18 @@ class MenuHamburguer:
             activebackground="#e0e0e0",
         ).pack(fill="x", pady=5, padx=10)
 
+        # Botão Notificações
+        tk.Button(
+            self.frame_menu,
+            text="Notificações",
+            command=self._mostrar_notificacoes,
+            bg="white",
+            fg="#333",
+            font=("Arial", 12),
+            bd=0,
+            activebackground="#e0e0e0",
+        ).pack(fill="x", pady=5, padx=10)
+
         # Botão Logout
         tk.Button(
             self.frame_menu,
@@ -129,6 +142,11 @@ class MenuHamburguer:
         """Callback para exibir o calendário que também fecha o menu."""
         self.fechar_menu()
         self.mostrar_calendario_callback()
+
+    def _mostrar_notificacoes(self):
+        """Callback para exibir as notificações que também fecha o menu."""
+        self.fechar_menu()
+        self.mostrar_notificacoes_callback()
 
     def _logout(self):
         """Callback para logout que também fecha o menu."""
