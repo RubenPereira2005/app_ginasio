@@ -14,20 +14,55 @@ class PaginaAulas:
         imagens_encontradas = []
 
         horarios_por_aula = {
+            "Bodypump": {
+                "dias": ["Segunda-feira", "Quinta-feira", "Sábado"],
+                "horarios": ["07:00", "12:00", "19:00"],
+                "professor": "Prof. Beatriz"
+            },
+            "Crossfit": {
+                "dias": ["Segunda-feira", "Terça-feira", "Sexta-feira"],
+                "horarios": ["06:30", "14:00", "18:30"],
+                "professor": "Prof. Ricardo"
+            },
+            "Hidroginástica": {
+                "dias": ["Terça-feira", "Quarta-feira", "Sábado"],
+                "horarios": ["09:30", "13:30", "17:00"],
+                "professor": "Prof. Sofia"
+            },
+            "HIIT": {
+                "dias": ["Quarta-feira", "Sexta-feira", "Domingo"],
+                "horarios": ["07:00", "11:00", "20:00"],
+                "professor": "Prof. Paulo"
+            },
+            "Personal Trainer": {
+                "dias": ["Segunda-feira", "Quarta-feira", "Sexta-feira"],
+                "horarios": ["08:00", "15:00", "19:00"],
+                "professor": "Prof. Mariana"
+            },
             "Pilates": {
                 "dias": ["Segunda-feira", "Terça-feira", "Quarta-feira"],
-                "horarios": ["08:00", "16:00"],
+                "horarios": ["08:00", "16:00", "18:00"],
                 "professor": "Prof. Ana"
             },
-            "Zumba": {
-                "dias": ["Terça-feira", "Quarta-feira", "Quinta-feira"],
-                "horarios": ["10:00", "18:00"],
-                "professor": "Prof. João"
+            "Spinning": {
+                "dias": ["Terça-feira", "Quinta-feira", "Sábado"],
+                "horarios": ["06:00", "10:00", "18:00"],
+                "professor": "Prof. André"
+            },
+            "Step Aeróbico": {
+                "dias": ["Quinta-feira", "Sexta-feira", "Domingo"],
+                "horarios": ["08:30", "13:00", "16:30"],
+                "professor": "Prof. Clara"
             },
             "Yoga": {
                 "dias": ["Sexta-feira", "Sábado", "Domingo"],
-                "horarios": ["09:00", "15:00"],
+                "horarios": ["09:00", "15:00", "17:00"],
                 "professor": "Prof. Carla"
+            },
+            "Zumba": {
+                "dias": ["Terça-feira", "Quarta-feira", "Quinta-feira"],
+                "horarios": ["10:00", "18:00", "20:00"],
+                "professor": "Prof. João"
             },
         }
 
