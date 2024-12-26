@@ -63,8 +63,21 @@ class PaginaInicial:
         from calendario import ListaAulas
 
         aulas_semanais = {
-            "Pilates": {"dias": ["Segunda-feira", "Quarta-feira"], "horarios": ["08:00", "16:00"], "professor": "Ana"},
-            "Yoga": {"dias": ["Terça-feira", "Quinta-feira"], "horarios": ["09:00", "18:00"], "professor": "Carla"},
+            "Pilates": {
+                "dias": ["Segunda-feira", "Terça-feira", "Quarta-feira"],
+                "horarios": ["08:00", "16:00"],
+                "professor": "Prof. Ana"
+            },
+            "Zumba": {
+                "dias": ["Terça-feira", "Quarta-feira", "Quinta-feira"],
+                "horarios": ["10:00", "18:00"],
+                "professor": "Prof. João"
+            },
+            "Yoga": {
+                "dias": ["Sexta-feira", "Sábado", "Domingo"],
+                "horarios": ["09:00", "15:00"],
+                "professor": "Prof. Carla"
+            },
         }
 
         calendario = ListaAulas(self.frame_principal, aulas_semanais)

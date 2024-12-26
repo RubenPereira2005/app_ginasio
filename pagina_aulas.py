@@ -143,12 +143,22 @@ class PaginaAulas:
 
         tk.Label(self.frame_principal, text="Aulas Disponíveis", font=("Arial", 20)).pack(pady=10)
 
+        # Canvas para suportar rolagem
         canvas = tk.Canvas(self.frame_principal)
         scrollbar = tk.Scrollbar(self.frame_principal, orient="vertical", command=canvas.yview)
         canvas.configure(yscrollcommand=scrollbar.set)
 
+        # Frame interno para conter as aulas
         frame_aulas = tk.Frame(canvas)
+        frame_aulas.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         canvas.create_window((0, 0), window=frame_aulas, anchor="nw")
+
+        # Função para rolar com o mouse
+        def _on_mouse_wheel(event):
+            canvas.yview_scroll(-1 * int(event.delta / 120), "units")
+
+        canvas.bind_all("<MouseWheel>", _on_mouse_wheel)
+
         scrollbar.pack(side="right", fill="y")
         canvas.pack(side="left", fill="both", expand=True)
 
