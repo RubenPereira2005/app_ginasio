@@ -4,7 +4,7 @@ from pagina_aulas import PaginaAulas
 from menu_hamburguer import MenuHamburguer
 from pagina_inicial import PaginaInicial
 from calendario import ListaAulas
-from notificacoes import PaginaNotificacoes
+from planos_mensais import PaginaGestaoPlanos
 
 class AppGinásio:
     def __init__(self, root):
@@ -74,7 +74,7 @@ class AppGinásio:
         self.pagina_inicial = PaginaInicial(self.frame_principal)
         self.pagina_aulas = PaginaAulas(self.frame_principal)
         self.lista_aulas = ListaAulas(self.frame_principal, self.aulas_semanais)
-        self.pagina_notificacoes = PaginaNotificacoes(self.frame_principal)
+        self.pagina_notificacoes = PaginaGestaoPlanos(self.frame_principal)
 
         # Instância do menu hambúrguer
         self.menu_hamburguer = MenuHamburguer(
@@ -117,7 +117,8 @@ class AppGinásio:
         """Mostra a página de notificações."""
         self.ocultar_frames()
         self.menu_hamburguer.mostrar_menu_hamburguer()
-        self.pagina_notificacoes.mostrar_pagina_notificacoes()
+        self.pagina_notificacoes.mostrar_pagina_planos()
+
 
     def logout(self):
         """Realiza o logout e volta para a página de login."""
