@@ -1,22 +1,35 @@
 import tkinter as tk
 
-class PaginaGestaoPlanos:
+class PaginaBase:
     def __init__(self, root):
         self.root = root
-        self.frame_planos = tk.Frame(self.root)
+        self.frame = tk.Frame(self.root)
 
-    def mostrar_pagina_planos(self):
-        """Exibe a página de gestão de planos de assinatura."""
-        # Limpa ou recria o frame
-        if not self.frame_planos.winfo_exists():
-            self.frame_planos = tk.Frame(self.root, bg="white")
+    def mostrar_pagina(self):
+        """Exibe a página associada ao frame."""
+        if not self.frame.winfo_exists():
+            self.frame = tk.Frame(self.root, bg="white")
 
         self.limpar_frame()
-        self.frame_planos.pack(fill="both", expand=True)
+        self.frame.pack(fill="both", expand=True)
+
+    def limpar_frame(self):
+        """Remove todos os widgets do frame principal."""
+        if self.frame.winfo_exists():
+            for widget in self.frame.winfo_children():
+                widget.destroy()
+
+class PaginaGestaoPlanos(PaginaBase):
+    def __init__(self, root):
+        super().__init__(root)
+
+    def mostrar_pagina(self):
+        """Exibe a página de gestão de planos de assinatura."""
+        super().mostrar_pagina()
 
         # Título da página
         tk.Label(
-            self.frame_planos,
+            self.frame,
             text="Gestão de Planos de Assinatura",
             font=("Arial", 16, "bold"),
             fg="black",
@@ -25,10 +38,10 @@ class PaginaGestaoPlanos:
         ).pack(fill="x")
 
         # Container para scroll
-        canvas = tk.Canvas(self.frame_planos)
+        canvas = tk.Canvas(self.frame)
         canvas.pack(side="left", fill="both", expand=True)
 
-        scrollbar = tk.Scrollbar(self.frame_planos, orient="vertical", command=canvas.yview)
+        scrollbar = tk.Scrollbar(self.frame, orient="vertical", command=canvas.yview)
         scrollbar.pack(side="right", fill="y")
 
         canvas.configure(yscrollcommand=scrollbar.set)
@@ -41,45 +54,49 @@ class PaginaGestaoPlanos:
 
         planos = self.obter_planos()
         for plano in planos:
-            frame_item = tk.Frame(container, bg="#f5f5f5", relief="groove", borderwidth=1)
-            frame_item.pack(fill="x", pady=10, padx=5)
+            self.criar_item_plano(container, plano)
 
-            # Nome do plano
-            tk.Label(
-                frame_item,
-                text=plano['nome'],
-                font=("Arial", 14, "bold"),
-                bg="#f5f5f5",
-                fg="#333",
-                anchor="w",
-                padx=10,
-            ).pack(fill="x", pady=5)
+    def criar_item_plano(self, container, plano):
+        """Cria um item visual para exibir os detalhes de um plano."""
+        frame_item = tk.Frame(container, bg="#f5f5f5", relief="groove", borderwidth=1)
+        frame_item.pack(fill="x", pady=10, padx=5)
 
-            # Detalhes do plano
-            detalhes = (
-                f"Aulas: {plano['aulas_por_semana']} vezes/semana | "
-                f"Máximo: {plano['max_aulas_por_mes']} aulas/mês"
-            )
-            tk.Label(
-                frame_item,
-                text=detalhes,
-                font=("Arial", 12),
-                bg="#f5f5f5",
-                fg="#555",
-                anchor="w",
-                padx=10,
-            ).pack(fill="x", pady=5)
+        # Nome do plano
+        tk.Label(
+            frame_item,
+            text=plano['nome'],
+            font=("Arial", 14, "bold"),
+            bg="#f5f5f5",
+            fg="#333",
+            anchor="w",
+            padx=10,
+        ).pack(fill="x", pady=5)
 
-            # Valor do plano
-            tk.Label(
-                frame_item,
-                text=f"€ {plano['valor']:.2f}/mês",
-                font=("Arial", 12, "bold"),
-                bg="#f5f5f5",
-                fg="#228B22",
-                anchor="w",
-                padx=10,
-            ).pack(fill="x", pady=5)
+        # Detalhes do plano
+        detalhes = (
+            f"Aulas: {plano['aulas_por_semana']} vezes/semana | "
+            f"Máximo: {plano['max_aulas_por_mes']} aulas/mês"
+        )
+        tk.Label(
+            frame_item,
+            text=detalhes,
+            font=("Arial", 12),
+            bg="#f5f5f5",
+            fg="#555",
+            anchor="w",
+            padx=10,
+        ).pack(fill="x", pady=5)
+
+        # Valor do plano
+        tk.Label(
+            frame_item,
+            text=f"€ {plano['valor']:.2f}/mês",
+            font=("Arial", 12, "bold"),
+            bg="#f5f5f5",
+            fg="#228B22",
+            anchor="w",
+            padx=10,
+        ).pack(fill="x", pady=5)
 
     def obter_planos(self):
         """Retorna uma lista de planos fictícios."""
@@ -89,10 +106,3 @@ class PaginaGestaoPlanos:
             {'id': 3, 'nome': 'Plano Fitness Ilimitado', 'aulas_por_semana': 7, 'max_aulas_por_mes': 28, 'valor': 100.00},
             {'id': 4, 'nome': 'Plano Fitness Diário', 'aulas_por_semana': 1, 'max_aulas_por_mes': 1, 'valor': 10.0},
         ]
-
-    def limpar_frame(self):
-        """Remove todos os widgets do frame principal."""
-        if self.frame_planos.winfo_exists():
-            for widget in self.frame_planos.winfo_children():
-                widget.destroy()
-

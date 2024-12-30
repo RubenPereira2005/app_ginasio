@@ -3,9 +3,22 @@ from tkinter import messagebox
 from PIL import Image, ImageTk, ImageDraw, ImageFont
 import os
 
-class PaginaAulas:
+class PaginaBase:
     def __init__(self, frame_principal):
         self.frame_principal = frame_principal
+
+    def limpar_frame(self):
+        """Remove todos os widgets do frame principal."""
+        for widget in self.frame_principal.winfo_children():
+            widget.destroy()
+
+    def mostrar_pagina(self):
+        """Exibe a página associada ao frame."""
+        self.limpar_frame()
+
+class PaginaAulas(PaginaBase):
+    def __init__(self, frame_principal):
+        super().__init__(frame_principal)
         self.diretorio_base = os.path.dirname(os.path.abspath(__file__))
         self.aulas = self.localizar_imagens(self.diretorio_base)
 
@@ -71,7 +84,7 @@ class PaginaAulas:
                 if file.lower().endswith(tipos_imagem):
                     caminho_imagem = os.path.join(root, file)
                     nome_aula = os.path.splitext(file)[0].capitalize()
-                    
+
                     horarios = horarios_por_aula.get(nome_aula, {
                         "dias": ["Segunda-feira"],
                         "horarios": ["08:00"],
@@ -125,8 +138,7 @@ class PaginaAulas:
         return borda
 
     def mostrar_detalhes(self, aula):
-        for widget in self.frame_principal.winfo_children():
-            widget.destroy()
+        self.limpar_frame()
 
         tk.Label(self.frame_principal, text=f"Aula: {aula['nome']}", font=("Arial", 18)).pack(pady=10)
         tk.Label(self.frame_principal, text=f"Professor: {aula['professor']}", font=("Arial", 14)).pack(pady=5)
@@ -139,8 +151,7 @@ class PaginaAulas:
         voltar_btn.pack(pady=20)
 
     def abrir_menu_reserva(self, aula):
-        for widget in self.frame_principal.winfo_children():
-            widget.destroy()
+        self.limpar_frame()
 
         tk.Label(self.frame_principal, text=f"Reservar: {aula['nome']}", font=("Arial", 18)).pack(pady=10)
 
@@ -173,8 +184,7 @@ class PaginaAulas:
         self.mostrar_detalhes(aula)
 
     def pagina_aulas(self):
-        for widget in self.frame_principal.winfo_children():
-            widget.destroy()
+        self.limpar_frame()
 
         tk.Label(self.frame_principal, text="Aulas Disponíveis", font=("Arial", 20)).pack(pady=10)
 
@@ -188,7 +198,6 @@ class PaginaAulas:
         frame_aulas.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         canvas.create_window((0, 0), window=frame_aulas, anchor="nw")
 
-        # Função para rolar com o mouse
         def _on_mouse_wheel(event):
             canvas.yview_scroll(-1 * int(event.delta / 120), "units")
 

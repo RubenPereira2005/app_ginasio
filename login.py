@@ -2,12 +2,8 @@ import tkinter as tk
 import json
 import os
 
-class Login:
+class GestaoUtilizadores:
     ARQUIVO_utilizadores = os.path.join(os.path.dirname(__file__), "utilizadores.json")
-
-    def __init__(self, frame_principal, pagina_aulas_callback):
-        self.frame_principal = frame_principal
-        self.pagina_aulas_callback = pagina_aulas_callback
 
     def carregar_utilizadores(self):
         if not os.path.exists(self.ARQUIVO_utilizadores):
@@ -47,6 +43,11 @@ class Login:
         return False
 
 
+class Login(GestaoUtilizadores):
+    def __init__(self, frame_principal, pagina_aulas_callback):
+        self.frame_principal = frame_principal
+        self.pagina_aulas_callback = pagina_aulas_callback
+
     def pagina_login(self):
         for widget in self.frame_principal.winfo_children():
             widget.destroy()
@@ -70,6 +71,19 @@ class Login:
 
         tk.Button(self.frame_principal, text="Entrar", command=fazer_login, bg="#4682b4", fg="white").pack(pady=10)
         tk.Button(self.frame_principal, text="Registe-se", command=self.pagina_registo, bg="#4682b4", fg="white").pack()
+
+    def pagina_registo(self):
+        """Chama a página de registro"""
+        for widget in self.frame_principal.winfo_children():
+            widget.destroy()
+
+        Registo(self.frame_principal, self.pagina_login).pagina_registo()
+
+
+class Registo(GestaoUtilizadores):
+    def __init__(self, frame_principal, pagina_login_callback):
+        self.frame_principal = frame_principal
+        self.pagina_login_callback = pagina_login_callback
 
     def pagina_registo(self):
         for widget in self.frame_principal.winfo_children():
@@ -120,9 +134,9 @@ class Login:
 
             if self.guardar_utilizador(utilizador, senha, email, telefone, morada):
                 self.mensagem_registo.config(text="Registro realizado com sucesso!", fg="green")
-                self.pagina_login()
+                self.pagina_login_callback()
             else:
                 self.mensagem_registo.config(text="Erro: Nome de utilizador já existe ou falha ao salvar os dados.", fg="red")
 
         tk.Button(self.frame_principal, text="Registar", command=fazer_registo, bg="#4682b4", fg="white").pack(pady=10)
-        tk.Button(self.frame_principal, text="Voltar", command=self.pagina_login, bg="#4682b4", fg="white").pack()
+        tk.Button(self.frame_principal, text="Voltar", command=self.pagina_login_callback, bg="#4682b4", fg="white").pack()

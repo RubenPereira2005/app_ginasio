@@ -99,7 +99,7 @@ class AppGinásio:
         """Mostra a página inicial após o login."""
         self.ocultar_frames()
         self.menu_hamburguer.mostrar_menu_hamburguer()
-        self.pagina_inicial.mostrar_pagina_inicial()
+        self.pagina_inicial.mostrar_pagina()
 
     def mostrar_aulas(self):
         """Mostra a página de aulas e adiciona o menu hambúrguer."""
@@ -114,11 +114,10 @@ class AppGinásio:
         self.lista_aulas.mostrar_lista()
 
     def mostrar_planos_mensais(self):
-        """Mostra a página de notificações."""
+        """Mostra a página de planos mensais."""
         self.ocultar_frames()
         self.menu_hamburguer.mostrar_menu_hamburguer()
-        self.pagina_planos_mensais.mostrar_pagina_planos()
-
+        self.pagina_planos_mensais.mostrar_pagina()
 
     def logout(self):
         """Realiza o logout e volta para a página de login."""

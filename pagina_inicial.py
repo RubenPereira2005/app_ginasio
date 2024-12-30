@@ -1,9 +1,24 @@
 import tkinter as tk
-import datetime
+from datetime import datetime
+from calendario import ListaAulas
+from pagina_aulas import PaginaAulas
 
-class PaginaInicial:
+class PaginaBase:
     def __init__(self, frame_principal):
         self.frame_principal = frame_principal
+
+    def mostrar_pagina(self):
+        """Exibe a página associada ao frame."""
+        self.limpar_frame()
+
+    def limpar_frame(self):
+        """Remove todos os widgets do frame principal."""
+        for widget in self.frame_principal.winfo_children():
+            widget.destroy()
+
+class PaginaInicial(PaginaBase):
+    def __init__(self, frame_principal):
+        super().__init__(frame_principal)
         self.user_data = {
             "weekly_progress": 3,  # Treinos realizados na semana
             "total_workouts": 12
@@ -12,12 +27,11 @@ class PaginaInicial:
     def atualizar_usuario(self, nome):
         """Atualiza o nome do usuário exibido na interface."""
         self.user_data["name"] = nome
-        self.mostrar_pagina_inicial()
+        self.mostrar_pagina()
 
-    def mostrar_pagina_inicial(self):
+    def mostrar_pagina(self):
         """Exibe a página inicial."""
-        for widget in self.frame_principal.winfo_children():
-            widget.destroy()
+        super().mostrar_pagina()
 
         upcoming_classes = [
             {"name": "Spinning", "time": "18:00", "date": "07/01/2025"},
@@ -30,7 +44,7 @@ class PaginaInicial:
         ]
 
         notifications = [
-            "Aula de Spinning às 19h está quase !",
+            "Aula de Spinning às 19h está quase lotada!",
             "Promoção: 10% de desconto no Personal Trainer."
         ]
 
@@ -40,28 +54,26 @@ class PaginaInicial:
         tk.Label(self.frame_principal, text=f"Progresso semanal: {self.user_data['weekly_progress']} treinos realizados", font=("Arial", 12)).pack(pady=5)
         tk.Label(self.frame_principal, text=f"Total de treinos: {self.user_data['total_workouts']}", font=("Arial", 12)).pack(pady=5)
 
-        # Próximas aulas reservadas
-        tk.Label(self.frame_principal, text="Próximas aulas reservadas:", font=("Arial", 14, "bold")).pack(pady=10)
-        for cls in upcoming_classes:
-            tk.Label(self.frame_principal, text=f"- {cls['name']} às {cls['time']} em {cls['date']}", font=("Arial", 12)).pack()
-
-        # Recomendações de aulas
-        tk.Label(self.frame_principal, text="\nRecomendações de aulas:", font=("Arial", 14, "bold")).pack(pady=10)
-        for rec in class_recommendations:
-            tk.Label(self.frame_principal, text=f"- {rec['name']} às {rec['time']}", font=("Arial", 12)).pack()
-
-        # Notificações
-        tk.Label(self.frame_principal, text="\nNotificações:", font=("Arial", 14, "bold")).pack(pady=10)
-        for note in notifications:
-            tk.Label(self.frame_principal, text=f"- {note}", font=("Arial", 12)).pack()
+        self.mostrar_lista("Próximas aulas reservadas", upcoming_classes, "name", "time", "date")
+        self.mostrar_lista("Recomendações de aulas", class_recommendations, "name", "time")
+        self.mostrar_lista("Notificações", notifications)
 
         # Botões para páginas adicionais
         tk.Button(self.frame_principal, text="Acessar Calendário", font=("Arial", 12), command=self.ir_para_calendario).pack(pady=10)
         tk.Button(self.frame_principal, text="Acessar Página de Aulas", font=("Arial", 12), command=self.ir_para_aulas).pack(pady=10)
 
-    def ir_para_calendario(self):
-        from calendario import ListaAulas
+    def mostrar_lista(self, titulo, itens, *keys):
+        """Exibe uma lista de itens na interface."""
+        tk.Label(self.frame_principal, text=f"\n{titulo}:", font=("Arial", 14, "bold")).pack(pady=10)
+        for item in itens:
+            if isinstance(item, dict):
+                texto = " - ".join([f"{item[key]}" for key in keys])
+            else:
+                texto = f"- {item}"
+            tk.Label(self.frame_principal, text=texto, font=("Arial", 12)).pack()
 
+    def ir_para_calendario(self):
+        """Navega para a página de calendário."""
         aulas_semanais = {
             "Bodypump": {
                 "dias": ["Segunda-feira", "Quinta-feira", "Sábado"],
@@ -119,10 +131,6 @@ class PaginaInicial:
         calendario.mostrar_lista()
 
     def ir_para_aulas(self):
-        from pagina_aulas import PaginaAulas
-
+        """Navega para a página de aulas."""
         aulas = PaginaAulas(self.frame_principal)
         aulas.pagina_aulas()
-
-
-
