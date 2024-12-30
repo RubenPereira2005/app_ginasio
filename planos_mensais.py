@@ -82,17 +82,6 @@ class PaginaGestaoPlanos:
                 padx=10,
             ).pack(fill="x", pady=5)
 
-            # Botão para mais detalhes
-            btn_detalhes = tk.Button(
-                frame_item,
-                text="Ver Detalhes",
-                bg="#1E90FF",
-                fg="white",
-                font=("Arial", 12),
-                command=lambda p=plano: self.mostrar_detalhes_plano(p)
-            )
-            btn_detalhes.pack(fill="x", pady=5, padx=10)
-
     def obter_planos(self):
         """Retorna uma lista de planos fictícios."""
         return [
@@ -101,42 +90,6 @@ class PaginaGestaoPlanos:
             {'id': 3, 'nome': 'Plano Fitness Ilimitado', 'aulas_por_semana': 7, 'max_aulas_por_mes': 28, 'valor': 100.00},
             {'id': 4, 'nome': 'Plano Fitness Diário', 'aulas_por_semana': 1, 'max_aulas_por_mes': 1, 'valor': 10.0},
         ]
-
-    def mostrar_detalhes_plano(self, plano):
-        """Exibe os detalhes de um plano selecionado."""
-        detalhe_janela = tk.Toplevel(self.root)
-        detalhe_janela.title(f"Detalhes do {plano['nome']}")
-
-        tk.Label(
-            detalhe_janela,
-            text=f"Plano: {plano['nome']}",
-            font=("Arial", 16, "bold"),
-            pady=10,
-        ).pack()
-
-        detalhes = (
-            f"Aulas por semana: {plano['aulas_por_semana']}\n"
-            f"Máximo de aulas por mês: {plano['max_aulas_por_mes']}\n"
-            f"Valor mensal: € {plano['valor']:.2f}"
-        )
-        tk.Label(
-            detalhe_janela,
-            text=detalhes,
-            font=("Arial", 12),
-            justify="left",
-            padx=10,
-            pady=10,
-        ).pack()
-
-        tk.Button(
-            detalhe_janela,
-            text="Fechar",
-            command=detalhe_janela.destroy,
-            bg="#4682b4",
-            fg="white",
-            padx=10,
-            pady=5,
-        ).pack(pady=10)
 
     def limpar_frame(self):
         """Remove todos os widgets do frame principal."""
