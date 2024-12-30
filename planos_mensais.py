@@ -19,8 +19,7 @@ class PaginaGestaoPlanos:
             self.frame_planos,
             text="Gestão de Planos de Assinatura",
             font=("Arial", 16, "bold"),
-            bg="#4682b4",
-            fg="white",
+            fg="black",
             height=2,
             anchor="center",
         ).pack(fill="x")
@@ -34,7 +33,7 @@ class PaginaGestaoPlanos:
 
         canvas.configure(yscrollcommand=scrollbar.set)
 
-        container = tk.Frame(canvas, bg="white")
+        container = tk.Frame(canvas)
         canvas.create_window((0, 0), window=container, anchor="nw")
 
         # Atualiza a região visível do canvas quando o conteúdo mudar

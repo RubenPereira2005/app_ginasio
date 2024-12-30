@@ -74,7 +74,7 @@ class AppGinásio:
         self.pagina_inicial = PaginaInicial(self.frame_principal)
         self.pagina_aulas = PaginaAulas(self.frame_principal)
         self.lista_aulas = ListaAulas(self.frame_principal, self.aulas_semanais)
-        self.pagina_notificacoes = PaginaGestaoPlanos(self.frame_principal)
+        self.pagina_planos_mensais = PaginaGestaoPlanos(self.frame_principal)
 
         # Instância do menu hambúrguer
         self.menu_hamburguer = MenuHamburguer(
@@ -83,7 +83,7 @@ class AppGinásio:
             mostrar_aulas_callback=self.mostrar_aulas,
             voltar_pagina_inicial_callback=self.mostrar_pagina_inicial,
             mostrar_calendario_callback=self.mostrar_lista_aulas,
-            mostrar_notificacoes_callback=self.mostrar_notificacoes,
+            mostrar_planos_mensais_callback=self.mostrar_planos_mensais,
             logout_callback=self.logout,
         )
 
@@ -113,11 +113,11 @@ class AppGinásio:
         self.menu_hamburguer.mostrar_menu_hamburguer()
         self.lista_aulas.mostrar_lista()
 
-    def mostrar_notificacoes(self):
+    def mostrar_planos_mensais(self):
         """Mostra a página de notificações."""
         self.ocultar_frames()
         self.menu_hamburguer.mostrar_menu_hamburguer()
-        self.pagina_notificacoes.mostrar_pagina_planos()
+        self.pagina_planos_mensais.mostrar_pagina_planos()
 
 
     def logout(self):
