@@ -20,12 +20,12 @@ class PaginaInicial(PaginaBase):
     def __init__(self, frame_principal):
         super().__init__(frame_principal)
         self.user_data = {
-            "weekly_progress": 3,  # Treinos realizados na semana
+            "weekly_progress": 3,  
             "total_workouts": 12
         }
 
-    def atualizar_usuario(self, nome):
-        """Atualiza o nome do usuário exibido na interface."""
+    def atualizar_utilizador(self, nome):
+        """Atualiza o nome do Utilizador  exibido na interface."""
         self.user_data["name"] = nome
         self.mostrar_pagina()
 
@@ -58,7 +58,7 @@ class PaginaInicial(PaginaBase):
         self.mostrar_lista("Recomendações de aulas", class_recommendations, "name", "time")
         self.mostrar_lista("Notificações", notifications)
 
-        # Botões para páginas adicionais
+        
         tk.Button(self.frame_principal, text="Acessar Calendário", font=("Arial", 12), command=self.ir_para_calendario).pack(pady=10)
         tk.Button(self.frame_principal, text="Acessar Página de Aulas", font=("Arial", 12), command=self.ir_para_aulas).pack(pady=10)
 

@@ -87,7 +87,7 @@ class AppGinásio:
             logout_callback=self.logout,
         )
 
-        # Inicia na página de login
+    
         self.login.pagina_login()
 
     def ocultar_frames(self):
