@@ -20,8 +20,8 @@ class PaginaInicial(PaginaBase):
     def __init__(self, frame_principal):
         super().__init__(frame_principal)
         self.user_data = {
-            "weekly_progress": 3,  
-            "total_workouts": 12
+            "weekly_progress": 0,  
+            "total_workouts": 0
         }
 
     def atualizar_utilizador(self, nome):
@@ -59,8 +59,8 @@ class PaginaInicial(PaginaBase):
         self.mostrar_lista("Notificações", notifications)
 
         
-        tk.Button(self.frame_principal, text="Acessar Calendário", font=("Arial", 12), command=self.ir_para_calendario).pack(pady=10)
-        tk.Button(self.frame_principal, text="Acessar Página de Aulas", font=("Arial", 12), command=self.ir_para_aulas).pack(pady=10)
+        tk.Button(self.frame_principal, text="Calendário", font=("Arial", 12), command=self.ir_para_calendario).pack(pady=10)
+        tk.Button(self.frame_principal, text="Página de Aulas", font=("Arial", 12), command=self.ir_para_aulas).pack(pady=10)
 
     def mostrar_lista(self, titulo, itens, *keys):
         """Exibe uma lista de itens na interface."""
