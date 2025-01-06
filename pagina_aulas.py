@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk, ImageDraw, ImageFont
 import os
+import random
 
 class PaginaBase:
     def __init__(self, frame_principal):
@@ -95,7 +96,7 @@ class PaginaAulas(PaginaBase):
                         "nome": nome_aula,
                         "imagem": caminho_imagem,
                         "professor": horarios["professor"],
-                        "participantes": 0,
+                        "participantes": random.randint(0, 20),
                         "dias": horarios["dias"],
                         "horarios": horarios["horarios"]
                     })
@@ -197,11 +198,6 @@ class PaginaAulas(PaginaBase):
         frame_aulas = tk.Frame(canvas)
         frame_aulas.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         canvas.create_window((0, 0), window=frame_aulas, anchor="nw")
-
-        def _on_mouse_wheel(event):
-            canvas.yview_scroll(-1 * int(event.delta / 120), "units")
-
-        canvas.bind_all("<MouseWheel>", _on_mouse_wheel)
 
         scrollbar.pack(side="right", fill="y")
         canvas.pack(side="left", fill="both", expand=True)

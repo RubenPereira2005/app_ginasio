@@ -41,11 +41,6 @@ class PaginaGestaoPlanos(PaginaBase):
         canvas = tk.Canvas(self.frame)
         canvas.pack(side="left", fill="both", expand=True)
 
-        scrollbar = tk.Scrollbar(self.frame, orient="vertical", command=canvas.yview)
-        scrollbar.pack(side="right", fill="y")
-
-        canvas.configure(yscrollcommand=scrollbar.set)
-
         container = tk.Frame(canvas)
         canvas.create_window((0, 0), window=container, anchor="nw")
 
