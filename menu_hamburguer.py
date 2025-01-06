@@ -1,9 +1,21 @@
 import tkinter as tk
 from tkinter import messagebox
 
-class ComponenteBase:
-    def __init__(self, root):
+import tkinter as tk
+
+class MenuHamburguer:
+    def __init__(self, root, frame_principal, mostrar_aulas_callback, voltar_pagina_inicial_callback, mostrar_calendario_callback, mostrar_planos_mensais_callback, logout_callback):
         self.root = root
+        self.frame_principal = frame_principal
+        self.mostrar_aulas_callback = mostrar_aulas_callback
+        self.voltar_pagina_inicial_callback = voltar_pagina_inicial_callback
+        self.mostrar_calendario_callback = mostrar_calendario_callback
+        self.mostrar_planos_mensais_callback = mostrar_planos_mensais_callback
+        self.logout_callback = logout_callback
+
+        self.menu_aberto = False
+        self.frame_menu = None
+        self.botao_menu = None
 
     def limpar_frame(self, frame):
         """Remove todos os widgets de um frame."""
@@ -23,24 +35,10 @@ class ComponenteBase:
             activebackground=activebackground,
         )
 
-class MenuHamburguer(ComponenteBase):
-    def __init__(self, root, frame_principal, mostrar_aulas_callback, voltar_pagina_inicial_callback, mostrar_calendario_callback, mostrar_planos_mensais_callback, logout_callback):
-        super().__init__(root)
-        self.frame_principal = frame_principal
-        self.mostrar_aulas_callback = mostrar_aulas_callback
-        self.voltar_pagina_inicial_callback = voltar_pagina_inicial_callback
-        self.mostrar_calendario_callback = mostrar_calendario_callback
-        self.mostrar_planos_mensais_callback = mostrar_planos_mensais_callback
-        self.logout_callback = logout_callback
-
-        self.menu_aberto = False
-        self.frame_menu = None
-        self.botao_menu = None
-
     def mostrar_menu_hamburguer(self):
         """Adiciona o botão de menu hambúrguer apenas em páginas principais."""
         if self.botao_menu and self.botao_menu.winfo_exists():
-            return  # Se o botão já existe, não faz nada
+            return
 
         self.botao_menu = self.criar_botao(
             self.root,
@@ -67,14 +65,12 @@ class MenuHamburguer(ComponenteBase):
 
     def abrir_menu(self):
         """Exibe o menu hambúrguer com estilo lateral."""
-        # Definindo o tamanho do menu lateral
-        menu_largura = 200  # Largura do menu
-        menu_altura = self.root.winfo_height()  # Altura do menu ajustada à altura da tela
+        menu_largura = 200
+        menu_altura = self.root.winfo_height()
 
         self.frame_menu = tk.Frame(self.root, bg="#f8f9fa", width=menu_largura, height=menu_altura)
         self.frame_menu.place(x=0, y=0)
 
-        # Título no menu
         tk.Label(
             self.frame_menu,
             text="Menu",
@@ -84,7 +80,6 @@ class MenuHamburguer(ComponenteBase):
             height=2,
         ).pack(fill="x")
 
-        # Botões do menu
         botoes = [
             ("Página Inicial", self._pagina_inicial),
             ("Página Aulas", self._pagina_aulas),
@@ -93,7 +88,6 @@ class MenuHamburguer(ComponenteBase):
             ("Logout", self._logout, "#b22222", "white", "#8b0000"),
         ]
 
-        # Adicionando botões ao menu
         for texto, comando, *cores in botoes:
             bg, fg, activebg = cores if cores else ("white", "#333", "#e0e0e0")
             self.criar_botao(self.frame_menu, texto, comando, bg, fg, activebg).pack(fill="x", pady=5, padx=10)
@@ -107,26 +101,21 @@ class MenuHamburguer(ComponenteBase):
         self.menu_aberto = False
 
     def _pagina_inicial(self):
-        """Callback para a página inicial que também fecha o menu."""
         self.fechar_menu()
         self.voltar_pagina_inicial_callback()
 
     def _pagina_aulas(self):
-        """Callback para a página de aulas que também fecha o menu."""
         self.fechar_menu()
         self.mostrar_aulas_callback()
 
     def _mostrar_calendario(self):
-        """Callback para exibir o calendário que também fecha o menu."""
         self.fechar_menu()
         self.mostrar_calendario_callback()
 
     def _mostrar_planos_mensais(self):
-        """Callback para exibir os Planos Mensais que também fecha o menu."""
         self.fechar_menu()
         self.mostrar_planos_mensais_callback()
 
     def _logout(self):
-        """Callback para logout que também fecha o menu."""
         self.fechar_menu()
         self.logout_callback()
