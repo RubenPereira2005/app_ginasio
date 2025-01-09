@@ -13,7 +13,7 @@ class GestaoUtilizadores:
             return json.load(f)
 
     def guardar_utilizador(self, utilizador, senha, email, telefone, morada):
-        utilizadores = self.carregar_utilizadores()  # Carregar os usuários existentes
+        utilizadores = self.carregar_utilizadores()  # Carregar os utilizadores existentes
         if utilizador in utilizadores:
             return False  # Nome de utilizador já existe
         # Adicionar o novo utilizador
